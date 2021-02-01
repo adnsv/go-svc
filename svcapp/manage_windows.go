@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 
 	"golang.org/x/sys/windows/registry"
@@ -132,6 +133,9 @@ func Status(name string) (string, error) {
 	defer m.Disconnect()
 	s, err := m.OpenService(name)
 	if err != nil {
+		if syserr, ok := err.(syscall.Errno); ok && uintptr(syserr) == 1060 {
+			return "uninstalled", nil
+		}
 		return "", err
 	}
 	defer s.Close()
