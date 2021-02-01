@@ -33,7 +33,7 @@ var ErrNotInstalled = errors.New("service is not installed")
 var ErrInsufficientPrivileges = errors.New("insufficient privileges")
 var ErrUnsupportedSystem = errors.New("unsupported system")
 var ErrInvalidSystemResponse = errors.New("invalid system response")
-var ErrAlreadyRunning = errors.New("service is already ranning")
+var ErrAlreadyRunning = errors.New("service is already running")
 var ErrAlreadyStopped = errors.New("service had already been stopped")
 
 func Install(params InstallParams) error {
@@ -112,7 +112,7 @@ func Stop(name string) error {
 
 func Status(name string) (string, error) {
 	if !isInstalled(name) {
-		return "", ErrNotInstalled
+		return "uninstalled", nil
 	}
 	if ok, err := checkPrivileges(); !ok {
 		return "", err
